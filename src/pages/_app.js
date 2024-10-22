@@ -1,6 +1,6 @@
 import "@styles/custom.css";
 import { CartProvider } from "react-use-cart";
-import { Elements } from "@stripe/react-stripe-js";
+// import { Elements } from "@stripe/react-stripe-js";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { Provider } from "react-redux";
@@ -12,7 +12,7 @@ import TawkMessengerReact from "@tawk.to/tawk-messenger-react";
 
 //internal import
 import store from "@redux/store";
-// import getStripe from "@lib/stripe";
+import getStripe from "@lib/stripe";
 import useAsync from "@hooks/useAsync";
 import { handlePageView } from "@lib/analytics";
 import { UserProvider } from "@context/UserContext";
