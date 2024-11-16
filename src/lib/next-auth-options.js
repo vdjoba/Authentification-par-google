@@ -4,6 +4,9 @@ import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
 import Facebook from "next-auth/providers/facebook";
 import Credentials from "next-auth/providers/credentials";
+import NextAuth from 'next-auth';
+
+
 
 import SettingServices from "@services/SettingServices";
 import CustomerServices from "@services/CustomerServices";
@@ -11,14 +14,16 @@ import CustomerServices from "@services/CustomerServices";
 export const getDynamicAuthOptions = async () => {
   const storeSetting = await SettingServices.getStoreSetting();
 
+  
+
   const providers = [
     Google({
-      clientId: storeSetting?.google_id || "",
-      clientSecret: storeSetting?.google_secret || "",
+      clientId: storeSetting?.google_id || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      clientSecret: storeSetting?.google_secret || process.env.GOOGLE_CLIENT_SECRET,
     }),
     GitHub({
-      clientId: storeSetting?.github_id || "",
-      clientSecret: storeSetting?.github_secret || "",
+      clientId: storeSetting?.github_id || process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
+      clientSecret: storeSetting?.github_secret || process.env.GITHUB_CLIENT_SECRET,
     }),
     Facebook({
       clientId: storeSetting?.facebook_id || "",
@@ -44,11 +49,6 @@ export const getDynamicAuthOptions = async () => {
         if (account.provider !== "credentials") {
           try {
             const res = await CustomerServices.signUpWithOauthProvider(user);
-
-            // if (error) {
-            //   console.error("OAuth sign-in error:", error);
-            //   return false;
-            // }
 
             if (res.token) {
               user.token = res.token;
@@ -99,7 +99,6 @@ export const getDynamicAuthOptions = async () => {
         return session;
       },
       async redirect({ url, baseUrl }) {
-        // console.log("url", url, "baseUrl", baseUrl);
         return url.startsWith(baseUrl) ? url : `${baseUrl}/user/dashboard`;
       },
     },
